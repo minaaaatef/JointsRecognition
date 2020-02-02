@@ -40,9 +40,7 @@ def weightaverage(beta,input):
         v =(( beta * v ) +((1 - beta) * input[i])) #weighting average equation
         out[i]=(v) #put each row in the out matrix
     return(out)
-def main():
-    beta=0.9#input from user
-    no_frames=20#input from user
+def InputProccessing(beta , path ,no_frames ): #beta for wightes average , path for jason file , no_frames for input frames
     with open('C://Users//future//PycharmProjects\pro1test//out.json') as f:#path of input file
         data = ast.literal_eval(f.read())#store data in list of dictionaries called data
     speed=np.matrix(clcspeed(data[0]['keypoints'],data[1]['keypoints'],0.01))#clc speed between the first two frames
@@ -60,7 +58,4 @@ def main():
     #print("avg_dir",angle.shape)
     speed=np.matrix(weightaverage(beta,speed))
     angle=np.matrix(weightaverage(beta,angle))
-    print(speed)
-    print(angle)
-if __name__=='__main__':
-    main()
+    return speed,angle
