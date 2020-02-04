@@ -43,13 +43,12 @@ def prepare_input_Matrix():
                 try:
                     x_train = InputProccessing(0.9,os.path.join(subdir,file),20)
                     y_train = labels[os.path.basename(subdir)]
+
+                    y_train = to_categorical(y_train,num_classes=16)
+                    yield np.array(x_train),np.array(y_train).reshape((1,16))
                 except:
                     pass
 
-
-        y_train = to_categorical(y_train,num_classes=16)
-
-        yield np.array(x_train),y_train
 
 
 def model ():
@@ -64,7 +63,7 @@ def model ():
                 input_shape=(None, data_dim)))  # returns a sequence of vectors of dimension 32
     model.add(LSTM(32, return_sequences=True))  # returns a sequence of vectors of dimension 32
     model.add(LSTM(32))  # return a single vector of dimension 32
-    model.add(Dense(num_classes, activation='softmax'))
+    model.add(Dense(16, activation='softmax'))
 
     model.compile(loss='categorical_crossentropy',
                 optimizer='adam',
@@ -72,15 +71,13 @@ def model ():
 
     model.summary()
 
-    model.fit_generator(generator=prepare_input_Matrix(),steps_per_epoch=2593,epochs=1,shuffle=True)
+    model.fit_generator(generator=prepare_input_Matrix(),steps_per_epoch=2593,epochs=1,use_multiprocessing=True,workers=16)
     print ('training finshed')
 
-    model.evaluate_generator(generator=prepare_input_Matrix())
+    model.evaluate_generator(generator=prepare_input_Matrix(),steps=2593)
     print ('evaluate finshed')
 
     model.save('model.h5')
-
-    model.save_weights("model_weights.h5")
 
 
 model ()
