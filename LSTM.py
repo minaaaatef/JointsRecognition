@@ -71,7 +71,7 @@ def model ():
 
     model.summary()
 
-    model.fit_generator(generator=prepare_input_Matrix(),steps_per_epoch=2593,epochs=1,use_multiprocessing=True,workers=16)
+    model.fit_generator(generator=prepare_input_Matrix(),steps_per_epoch=2593,epochs=500,use_multiprocessing=True,workers=16)
     print ('training finshed')
 
     model.evaluate_generator(generator=prepare_input_Matrix(),steps=2593)
