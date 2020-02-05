@@ -4,17 +4,16 @@ from keras.utils import to_categorical
 import numpy as np
 from Inputprocessing.InputProcessingv2 import InputProccessing
 import os
+import random
 
 
 
 
-
-def prepare_input_Matrix():
+def prepare_input_Matrix(path):
     print("training The data")
-    path = r'dataset'
     y_train = []
-    count = 1
-
+    all_data = []
+    
     labels = {'clap':0,
               'climb':1,
               'climb_stairs':2,
@@ -34,20 +33,29 @@ def prepare_input_Matrix():
               }
     epochs = 1
 
+    print(path)
+    for subdir, dirs, files in os.walk(path,topdown=True):
+        print("outerloop")
+        for file in files:
+            try:
+                print("innerloop")
+                x_train = InputProccessing(0.9,os.path.join(subdir,file),20)
+                y_train = labels[os.path.basename(subdir)]
+                y_train = to_categorical(y_train,num_classes=16)
+                data = (np.array(x_train),np.array(y_train).reshape((1,16)))
+                all_data.append(data)
+            except:
+                print("try failed")
+
     while True:
+        random.shuffle(all_data)
         print("epochs {}".format(epochs))
         epochs += 1
-        for subdir, dirs, files in os.walk(path,topdown=True):
-            for file in files:
+        for data in all_data:
+            data = list(data)
+            yield data[0],data[1]
 
-                try:
-                    x_train = InputProccessing(0.9,os.path.join(subdir,file),20)
-                    y_train = labels[os.path.basename(subdir)]
-
-                    y_train = to_categorical(y_train,num_classes=16)
-                    yield np.array(x_train),np.array(y_train).reshape((1,16))
-                except:
-                    pass
+                
 
 
 
@@ -56,7 +64,6 @@ def model ():
 
     data_dim = 34
     num_classes = 16
-
 
     model = Sequential()
     model.add(LSTM(32, return_sequences=True,
@@ -70,11 +77,11 @@ def model ():
                 metrics=['accuracy'])
 
     model.summary()
-
-    model.fit_generator(generator=prepare_input_Matrix(),steps_per_epoch=2593,epochs=500,use_multiprocessing=True,workers=16)
+    
+    model.fit_generator(generator=prepare_input_Matrix(r'dataset'),steps_per_epoch=2130,epochs=500)
     print ('training finshed')
 
-    model.evaluate_generator(generator=prepare_input_Matrix(),steps=2593)
+    model.evaluate_generator(generator=prepare_input_Matrix(r'validtion set'),steps=514)
     print ('evaluate finshed')
 
     model.save('model.h5')
