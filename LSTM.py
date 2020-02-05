@@ -32,6 +32,7 @@ def prepare_input_Matrix():
               'walk':14,
               'wave':15,
               }
+              
     epochs = 1
 
     while True:
@@ -63,7 +64,7 @@ def model ():
                 input_shape=(None, data_dim)))  # returns a sequence of vectors of dimension 32
     model.add(LSTM(32, return_sequences=True))  # returns a sequence of vectors of dimension 32
     model.add(LSTM(32))  # return a single vector of dimension 32
-    model.add(Dense(16, activation='softmax'))
+    model.add(Dense(num_classes, activation='softmax'))
 
     model.compile(loss='categorical_crossentropy',
                 optimizer='adam',
