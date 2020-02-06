@@ -85,9 +85,8 @@ def model ():
                 metrics=['accuracy'])
 
     model.summary()
-
-    model.fit_generator(generator=data_generator(r'dataset'),steps_per_epoch=2129,epochs=500,use_multiprocessing=True,workers=multiprocessing.cpu_count()
-)
+    ptint("cpu# {}".format(multiprocessing.cpu_count()))
+    model.fit_generator(generator=data_generator(r'dataset'),steps_per_epoch=2129,epochs=500,use_multiprocessing=True,workers=multiprocessing.cpu_count())
     print ('training finshed')
 
     model.evaluate_generator(generator=data_generator(r'validtion set'),steps=514)
