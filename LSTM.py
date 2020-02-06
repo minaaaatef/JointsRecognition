@@ -5,60 +5,65 @@ import numpy as np
 from InputProcessingv2 import InputProccessing
 import os
 import random
+import threading
+from keras.utils import Sequence
+
+
+class data_generator(Sequence):
+
+    def __init__(self, path):
+        self.batch_size = 1
+        print("training The data")
+        self.y_train = []
+        self.all_data = []
+
+        labels = {'clap': 0,
+                  'climb': 1,
+                  'climb_stairs': 2,
+                  'hit': 3,
+                  'jump': 4,
+                  'kick': 5,
+                  'pick': 6,
+                  'punch': 7,
+                  'push': 8,
+                  'run': 9,
+                  'sit': 10,
+                  'situp': 11,
+                  'stand': 12,
+                  'turn': 13,
+                  'walk': 14,
+                  'wave': 15,
+                  }
+
+        self.epochs = 1
+        self.count = 1
+        print(path)
+        for subdir, dirs, files in os.walk(path, topdown=True):
+            for file in files:
+                try:
+                    self.count += 1
+                    if (self.count % 100 == 0):
+                        print("preparing data # {}".format(self.count))
+
+                    x_train = InputProccessing(0.9, os.path.join(subdir, file), 20)
+                    y_train = labels[os.path.basename(subdir)]
+                    y_train = to_categorical(y_train, num_classes=16)
+                    data = (np.array(x_train), np.array(y_train).reshape((1, 16)))
+                    self.all_data.append(data)
+                except:
+                    print("try failed")
+
+        random.shuffle(self.all_data)
+
+    def __len__(self):
+        return 2130
+
+    def __getitem__(self, idx):
+            return self.all_data[idx][0],self.all_data[idx][1]
 
 
 
 
-def prepare_input_Matrix(path):
-    print("training The data")
-    y_train = []
-    all_data = []
-    
-    labels = {'clap':0,
-              'climb':1,
-              'climb_stairs':2,
-              'hit':3,
-              'jump':4,
-              'kick':5,
-              'pick':6,
-              'punch':7,
-              'push':8,
-              'run':9,
-              'sit':10,
-              'situp':11,
-              'stand':12,
-              'turn':13,
-              'walk':14,
-              'wave':15,
-              }
-              
-    epochs = 1
-    count = 1
-    print(path)
-    for subdir, dirs, files in os.walk(path,topdown=True):
-        for file in files:
-            try:
-                count += 1
-                if (count % 100 == 0):
-                    print("preparing data # {}".format(count))
-
-                x_train = InputProccessing(0.9,os.path.join(subdir,file),20)
-                y_train = labels[os.path.basename(subdir)]
-                y_train = to_categorical(y_train,num_classes=16)
-                data = (np.array(x_train),np.array(y_train).reshape((1,16)))
-                all_data.append(data)
-            except:
-                print("try failed")
-
-    while True:
-        random.shuffle(all_data)
-        print("epochs {}".format(epochs))
-        epochs += 1
-        for data in all_data:
-            data = list(data)
-            yield data[0],data[1]
-
-                
 
 
 
@@ -80,11 +85,11 @@ def model ():
                 metrics=['accuracy'])
 
     model.summary()
-    
-    model.fit_generator(generator=prepare_input_Matrix(r'dataset'),steps_per_epoch=2130,epochs=500)
+
+    model.fit_generator(generator=data_generator(r'dataset'),steps_per_epoch=2130,epochs=500,use_multiprocessing=True,workers=4)
     print ('training finshed')
 
-    model.evaluate_generator(generator=prepare_input_Matrix(r'validtion set'),steps=514)
+    model.evaluate_generator(generator=data_generator(r'validtion set'),steps=514)
     print ('evaluate finshed')
 
     model.save('model.h5')
