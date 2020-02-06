@@ -2,7 +2,7 @@ from keras.models import Sequential,model_from_json
 from keras.layers import LSTM, Dense
 from keras.utils import to_categorical
 import numpy as np
-from Inputprocessing.InputProcessingv2 import InputProccessing
+from InputProcessingv2 import InputProccessing
 import os
 import random
 
@@ -33,13 +33,15 @@ def prepare_input_Matrix(path):
               }
               
     epochs = 1
-
+    count = 1
     print(path)
     for subdir, dirs, files in os.walk(path,topdown=True):
-        print("outerloop")
         for file in files:
             try:
-                print("innerloop")
+                count += 1
+                if (count % 100 == 0):
+                    print("preparing data # {}".format(count))
+
                 x_train = InputProccessing(0.9,os.path.join(subdir,file),20)
                 y_train = labels[os.path.basename(subdir)]
                 y_train = to_categorical(y_train,num_classes=16)
