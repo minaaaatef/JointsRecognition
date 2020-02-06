@@ -5,8 +5,8 @@ import numpy as np
 from InputProcessingv2 import InputProccessing
 import os
 import random
-import threading
 from keras.utils import Sequence
+import multiprocessing
 
 
 class data_generator(Sequence):
@@ -86,7 +86,8 @@ def model ():
 
     model.summary()
 
-    model.fit_generator(generator=data_generator(r'dataset'),steps_per_epoch=2130,epochs=500,use_multiprocessing=True,workers=4)
+    model.fit_generator(generator=data_generator(r'dataset'),steps_per_epoch=2130,epochs=500,use_multiprocessing=True,workers=multiprocessing.cpu_count()
+)
     print ('training finshed')
 
     model.evaluate_generator(generator=data_generator(r'validtion set'),steps=514)
