@@ -56,10 +56,10 @@ class data_generator(Sequence):
         random.shuffle(self.all_data)
 
     def __len__(self):
-        return 2130
+        return 2129
 
     def __getitem__(self, idx):
-            return self.all_data[idx][0],self.all_data[idx][1]
+            return self.all_data[idx-1][0],self.all_data[idx-1][1]
 
 
 
