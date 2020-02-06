@@ -52,7 +52,7 @@ class data_generator(Sequence):
                     self.all_data.append(data)
                 except:
                     print("try failed")
-
+        print(self.all_data.__len__())
         random.shuffle(self.all_data)
 
     def __len__(self):
@@ -86,7 +86,7 @@ def model ():
 
     model.summary()
 
-    model.fit_generator(generator=data_generator(r'dataset'),steps_per_epoch=2130,epochs=500,use_multiprocessing=True,workers=multiprocessing.cpu_count()
+    model.fit_generator(generator=data_generator(r'dataset'),steps_per_epoch=2129,epochs=500,use_multiprocessing=True,workers=multiprocessing.cpu_count()
 )
     print ('training finshed')
 
