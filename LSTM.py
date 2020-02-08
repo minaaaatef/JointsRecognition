@@ -130,7 +130,7 @@ def model ():
                 optimizer='adam',
                 metrics=['accuracy'])
 
-    save_model = ModelCheckpoint('weights{epoch:08d}.h5',save_best_only=True,
+    save_model = ModelCheckpoint('weights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
     model.summary()
     model.fit_generator(generator=prepare_input_Matrix(r'dataset'),steps_per_epoch=2129,epochs=500,callbacks=[save_model])
