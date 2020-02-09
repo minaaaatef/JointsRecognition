@@ -108,7 +108,7 @@ def patchnormmodel ():
                 optimizer='adam',
                 metrics=['accuracy'])
 
-    save_model = ModelCheckpoint('patchnormmodel/weights{epoch:08d}.h5',
+    save_model = ModelCheckpoint('patchnormmodelweights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
     model.summary()
 
@@ -143,7 +143,7 @@ def biggermodel ():
                 optimizer='adam',
                 metrics=['accuracy'])
 
-    save_model = ModelCheckpoint('biggermodel/weights{epoch:08d}.h5',
+    save_model = ModelCheckpoint('biggermodelweights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
     model.summary()
 
@@ -175,7 +175,7 @@ def dropout ():
                 optimizer='adam',
                 metrics=['accuracy'])
 
-    save_model = ModelCheckpoint('dropout/weights{epoch:08d}.h5',
+    save_model = ModelCheckpoint('dropoutweights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
     model.summary()
 
