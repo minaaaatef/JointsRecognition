@@ -10,59 +10,23 @@ from keras.utils import Sequence
 import multiprocessing
 import matplotlib.pyplot as plt
 import pickle
-#
-# class data_generator(Sequence):
-#
-#     def __init__(self, path):
-#         self.batch_size = 1
-#         print("training The data")
-#         self.y_train = []
-#         self.all_data = []
-#
-#         labels = {'clap': 0,
-#                   'climb': 1,
-#                   'climb_stairs': 2,
-#                   'hit': 3,
-#                   'jump': 4,
-#                   'kick': 5,
-#                   'pick': 6,
-#                   'punch': 7,
-#                   'push': 8,
-#                   'run': 9,
-#                   'sit': 10,
-#                   'situp': 11,
-#                   'stand': 12,
-#                   'turn': 13,
-#                   'walk': 14,
-#                   'wave': 15,
-#                   }
-#
-#         self.epochs = 1
-#         self.count = 1
-#         print(path)
-#         for subdir, dirs, files in os.walk(path, topdown=True):
-#             for file in files:
-#                 try:
-#                     self.count += 1
-#                     if (self.count % 100 == 0):
-#                         print("preparing data # {}".format(self.count))
-#
-#                     x_train = InputProccessing(0.9, os.path.join(subdir, file), 20)
-#                     y_train = labels[os.path.basename(subdir)]
-#                     y_train = to_categorical(y_train, num_classes=16)
-#                     data = (np.array(x_train), np.array(y_train).reshape((1, 16)))
-#                     self.all_data.append(data)
-#                 except:
-#                     print("try failed")
-#         print(self.all_data.__len__())
-#         random.shuffle(self.all_data)
-#
-#     def __len__(self):
-#         return 2129
-#
-#     def __getitem__(self, idx):
-#             return self.all_data[idx-1][0],self.all_data[idx-1][1]
-#
+
+class data_generator(Sequence):
+
+    def __init__(self, mode="dev"):
+        if mode == "dev":
+            pickle_in = open("data/dev.pickle", "rb")
+            self.all_data = pickle.load(pickle_in)
+        else:
+            pickle_in = open("data/dataset.pickle", "rb")
+            self.all_data = pickle.load(pickle_in)
+
+    def __len__(self):
+        return len(self.all_data)
+
+    def __getitem__(self, idx):
+            return self.all_data[idx-1][0],self.all_data[idx-1][1]
+
 
 def save_list (path):
     print("training The data")
@@ -150,7 +114,8 @@ def patchnormmodel ():
 
 
 
-    model.fit_generator(generator=prepare_input_Matrix("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model])
+    model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
+                        ,use_multiprocessing=True, workers=2)
     # print ('training finshed')
 
 
@@ -184,7 +149,8 @@ def biggermodel ():
 
 
 
-    model.fit_generator(generator=prepare_input_Matrix("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model])
+    model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
+                        ,use_multiprocessing=True,workers=2)
     print ('training finshed')
 
 
@@ -215,7 +181,8 @@ def dropout ():
 
 
 
-    model.fit_generator(generator=prepare_input_Matrix("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model])
+    model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500
+                        ,callbacks=[save_model],use_multiprocessing=True,workers=2)
     print ('training finshed')
 
 
