@@ -37,7 +37,7 @@ pip3 install -r requirements
 ```
 * Run training.py
 ```python
-python3 Lstm.py
+python3 LSTM.py
 ```
 
 
