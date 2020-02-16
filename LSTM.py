@@ -11,6 +11,10 @@ import multiprocessing
 import matplotlib.pyplot as plt
 import pickle
 
+
+
+
+
 class data_generator(Sequence):
 
     def __init__(self, mode="dev"):
@@ -90,73 +94,93 @@ def prepare_input_Matrix(mode="dev"):
             yield data[0], data[1]
 
 
+
+
 def patchnormmodel ():
+    model_name = 'patchnormmodel'
+
+
 
     data_dim = 34
     num_classes = 16
 
+
+    # model
     model = Sequential()
-    model.add(LSTM(32, return_sequences=True,input_shape=(None, data_dim)))  # returns a sequence of vectors of dimension 32
+    model.add(Dense(units=32,input_shape=(None, data_dim)))
     model.add(BatchNormalization())
-    model.add(LSTM(32, return_sequences=True))  # returns a sequence of vectors of dimension 32
-    model.add(BatchNormalization())
-    model.add(LSTM(32))  # return a single vector of dimension 32
-    model.add(BatchNormalization())
+    model.add(LSTM(32, return_sequences=True))
+    model.add(LSTM(32, return_sequences=True))
+    model.add(LSTM(32))
     model.add(Dense(num_classes, activation='softmax'))
 
-    model.compile(loss='categorical_crossentropy',
-                optimizer='adam',
-                metrics=['accuracy'])
-
-    save_model = ModelCheckpoint('patchnormmodelweights{epoch:08d}.h5',
-                                         save_weights_only=False, period=10)
+    model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
     model.summary()
 
+    # callback to save model every 10 epochs
+    save_model = ModelCheckpoint(model_name+'weights{epoch:08d}.h5',
+                                         save_weights_only=False, period=10)
+
+    # to continue from where the training stopped
+    models = []
+    for file in os.listdir("First_training"):
+        if file.startswith(model_name):
+            models.append(file)
+
+    models.sort()
+    if models.__len__() > 2:
+        model.load_weights(models[-1])
+        epochnum = int(models[-1][-4:])
+
+    else:
+        epochnum = 0
 
 
     model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
-                        ,use_multiprocessing=True, workers=2)
-    # print ('training finshed')
-
-
-
-
+                        ,use_multiprocessing=True, workers=2 , initial_epoch=epochnum)
 
 
 def biggermodel ():
-
+    model_name = 'biggermodel'
 
     data_dim = 34
     num_classes = 16
 
     model = Sequential()
     model.add(LSTM(256, return_sequences=True, input_shape=(None, data_dim)))  # returns a sequence of vectors of dimension 32
-    # model.add(BatchNormalization())
     model.add(LSTM(256, return_sequences=True))  # returns a sequence of vectors of dimension 32
     model.add(LSTM(256, return_sequences=True))  # returns a sequence of vectors of dimension 32
-    # model.add(BatchNormalization())
-    model.add(LSTM(256))  # return a single vector of dimension 32
-    # model.add(BatchNormalization())
+    model.add(LSTM(256))
     model.add(Dense(num_classes, activation='softmax'))
 
-    model.compile(loss='categorical_crossentropy',
-                optimizer='adam',
-                metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 
-    save_model = ModelCheckpoint('biggermodelweights{epoch:08d}.h5',
-                                         save_weights_only=False, period=10)
+    save_model = ModelCheckpoint(biggermodel + 'weights{epoch:08d}.h5',save_weights_only=False, period=10)
+
     model.summary()
 
+    # to continue from where the training stopped
+    models = []
+    for file in os.listdir("First_training"):
+        if file.startswith(model_name):
+            models.append(file)
+
+    models.sort()
+    if models.__len__() > 2:
+        model.load_weights(models[-1])
+        epochnum = int(models[-1][-4:])
+
+    else:
+        epochnum = 0
 
 
     model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
-                        ,use_multiprocessing=True,workers=2)
-    print ('training finshed')
+                        ,use_multiprocessing=True,workers=2 ,initial_epoch=epochnum)
 
 
 
 def dropout ():
-
+    model_name = 'dropout'
 
     data_dim = 34
     num_classes = 16
@@ -171,21 +195,33 @@ def dropout ():
     model.add(Dropout(0.5))
     model.add(Dense(num_classes, activation='softmax'))
 
-    model.compile(loss='categorical_crossentropy',
-                optimizer='adam',
-                metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 
-    save_model = ModelCheckpoint('dropoutweights{epoch:08d}.h5',
+    save_model = ModelCheckpoint(model_name + 'weights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
     model.summary()
 
+    # to continue from where the training stopped
+    models = []
+    for file in os.listdir("First_training"):
+        if file.startswith(model_name):
+            models.append(file)
+
+    models.sort()
+    if models.__len__() > 2:
+        model.load_weights(models[-1])
+        epochnum = int(models[-1][-4:])
+
+    else:
+        epochnum = 0
 
 
     model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500
-                        ,callbacks=[save_model],use_multiprocessing=True,workers=2)
-    print ('training finshed')
+                        ,callbacks=[save_model],use_multiprocessing=True,workers=multiprocessing.cpu_count(),initial_epoch=epochnum)
+
+
 
 
 patchnormmodel()
-dropout ()
+dropout()
 biggermodel()
