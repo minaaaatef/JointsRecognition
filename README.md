@@ -1,13 +1,11 @@
 # joints-action-recognition
 
-
-
 ## Tutorial For Model Training
 we will connect to the training servers vie ssh 
 The ip to the server will be provied soon
 
 ### prerequisite
-1. linx terminal 
+1. Linux terminal 
 	for windows install [this](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10)
 2. Internet connection
 
@@ -52,7 +50,7 @@ apt install tmux
 
 * to start a tmux session 
 ``` pythyon 
-tumx
+tmux
 ```
 
 * Then run the trainig as before 
