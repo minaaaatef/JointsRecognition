@@ -94,8 +94,6 @@ def prepare_input_Matrix(mode="dev"):
             yield data[0], data[1]
 
 
-
-
 def patchnormmodel ():
     model_name = 'patchnormmodel'
 
@@ -178,7 +176,6 @@ def biggermodel ():
                         ,use_multiprocessing=True,workers=2 ,initial_epoch=epochnum)
 
 
-
 def dropout ():
     model_name = 'dropout'
 
@@ -225,3 +222,4 @@ def dropout ():
 patchnormmodel()
 dropout()
 biggermodel()
+
