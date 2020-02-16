@@ -32,7 +32,7 @@ apt install python3-pip
 * install prerequisite
 ```python 
 pip3 install setuptools
-pip3 install -r requirments
+pip3 install -r requirements
 ```
 * Run training.py
 ```python
