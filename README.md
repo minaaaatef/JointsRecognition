@@ -6,7 +6,7 @@ The ip to the server will be provied soon
 
 ### prerequisite
 1. Linux terminal 
-	for windows install [this](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10)
+	for windows install [this](https://www.howtogeek.com/336775/how-to-enable-and-use-windows-10s-built-in-ssh-commands/)
 2. Internet connection
 
 ## connecting to server
