@@ -20,6 +20,7 @@ git clone https://github.com/minaaaatef/JointsRecognition
 ```
 ```python
 cd JointsRecognition
+git pull
 ```
 * update server packages 
 ```python 
