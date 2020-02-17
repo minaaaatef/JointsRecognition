@@ -136,6 +136,6 @@ def dense_lstm ():
 
 
     model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
-                        ,use_multiprocessing=True, workers=2,max_queue_size=20)
+                        ,use_multiprocessing=True, workers=multiprocessing.cpu_count(),max_queue_size=20)
 
 
