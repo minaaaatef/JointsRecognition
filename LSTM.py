@@ -138,3 +138,4 @@ def dense_lstm ():
                         ,use_multiprocessing=True, workers=multiprocessing.cpu_count(),max_queue_size=20)
 
 
+dense_lstm()
