@@ -10,7 +10,6 @@ from keras.utils import Sequence
 import multiprocessing
 import matplotlib.pyplot as plt
 import pickle
-from keras.backend import cntk_backend
 
 
 
