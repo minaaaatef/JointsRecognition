@@ -159,13 +159,13 @@ def biggermodel ():
 
     # to continue from where the training stopped
     models = []
-    for file in os.listdir("First_training"):
+    for file in os.listdir("Second_training"):
         if file.startswith(model_name):
             models.append(file)
 
     models.sort()
     if models.__len__() > 2:
-        model.load_weights(models[-1])
+        model.load_weights('Second_training/'+models[-1])
         epochnum = int(models[-1][-4:])
 
     else:
@@ -173,7 +173,7 @@ def biggermodel ():
 
 
     model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
-                        ,use_multiprocessing=True,workers=2 ,initial_epoch=epochnum)
+                        ,use_multiprocessing=True,workers=2 ,initial_epoch=epochnum,shuffle=True,max_queue_size=20)
 
 
 def dropout ():
