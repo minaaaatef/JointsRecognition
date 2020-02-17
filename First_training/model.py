@@ -94,48 +94,33 @@ def prepare_input_Matrix(mode="dev"):
             yield data[0], data[1]
 
 
-def dense_lstm ():
-    model_name = 'patchnormmodel'
-
-
-
+def base ():
     data_dim = 34
     num_classes = 16
 
 
     # model
     model = Sequential()
-    model.add(Dense(units=32,input_shape=(None, data_dim)))
+    model.add(BatchNormalization())
+    model.add(LSTM(32, return_sequences=True,input_shape=(None, data_dim)))
     model.add(LSTM(32, return_sequences=True))
-    model.add(Dense(units=32))
-    model.add(LSTM(32, return_sequences=True))
-    model.add(Dense(units=32,input_shape=(None, data_dim)))
     model.add(LSTM(32))
     model.add(Dense(num_classes, activation='softmax'))
-
     model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
     model.summary()
 
     # callback to save model every 10 epochs
-    save_model = ModelCheckpoint(model_name+'weights{epoch:08d}.h5',
+    save_model = ModelCheckpoint('weights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
-
-    # # to continue from where the training stopped
-    # models = []
-    # for file in os.listdir(""):
-    #     if file.startswith(model_name):
-    #         models.append(file)
-    #
-    # models.sort()
-    # if models.__len__() > 2:
-    #     model.load_weights('Second_training/'+models[-1])
-    #     epochnum = int(models[-1][-7:][:4])
-    #
-    # else:
-    #     epochnum = 0
 
 
     model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
-                        ,use_multiprocessing=True, workers=2,max_queue_size=20)
+                        ,use_multiprocessing=True, workers=2 , initial_epoch=epochnum)
+
+
+
+
+
+base()
 
 
