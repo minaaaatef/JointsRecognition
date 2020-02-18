@@ -13,8 +13,10 @@ import pickle
 from keras.backend import cntk_backend
 
 
-
-
+'''
+Class to feed the data to the model while training
+Thread save so we could use use_multiprocessing = True
+'''
 class data_generator(Sequence):
 
     def __init__(self, mode="dev"):
@@ -32,6 +34,7 @@ class data_generator(Sequence):
             return self.all_data[idx-1][0],self.all_data[idx-1][1]
 
 
+#a fn to save the date to the to a pickle file
 def save_list (path):
     print("training The data")
     y_train = []
@@ -79,7 +82,10 @@ def save_list (path):
     pickle.dump(all_data, pickle_out)
     pickle_out.close()
 
-
+'''
+A function could replace the class data_generator
+But it couldn't be used with use_multiprocessing = True
+'''
 def prepare_input_Matrix(mode="dev"):
     if mode == "dev":
         pickle_in = open("data/dev.pickle", "rb")
@@ -93,7 +99,7 @@ def prepare_input_Matrix(mode="dev"):
             data = list(data)
             yield data[0], data[1]
 
-
+# the model fn
 def base ():
     data_dim = 34
     num_classes = 16
@@ -115,7 +121,7 @@ def base ():
 
 
     model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
-                        ,use_multiprocessing=True, workers=2 , initial_epoch=epochnum)
+                        ,use_multiprocessing=True, workers=2 )
 
 
 
