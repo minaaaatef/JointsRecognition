@@ -11,7 +11,15 @@ import multiprocessing
 import matplotlib.pyplot as plt
 import pickle
 
+import numpy as np
+from numpy.testing import assert_allclose
 
+from keras.layers import Input
+from keras import regularizers
+from keras.utils.test_utils import layer_test
+from keras.layers import normalization
+from keras.models import Sequential, Model
+from keras import backend as K
 
 
 class data_generator(Sequence):
@@ -65,7 +73,7 @@ def save_list (path):
                 if (count % 100 == 0):
                     print("preparing data # {}".format(count))
 
-                x_train = InputProccessing(0.9, os.path.join(subdir, file), 20)
+                x_train = InputProccessing(0.5, os.path.join(subdir, file), 20)
                 y_train = labels[os.path.basename(subdir)]
                 y_train = to_categorical(y_train, num_classes=16)
                 data = (np.array(x_train), np.array(y_train).reshape((1, 16)))
@@ -93,7 +101,7 @@ def prepare_input_Matrix(mode="dev"):
             yield data[0], data[1]
 
 
-def dense_lstm ():
+def patchnormmodel ():
     model_name = 'patchnormmodel'
 
 
@@ -105,12 +113,12 @@ def dense_lstm ():
     # model
     model = Sequential()
     model.add(Dense(units=32,input_shape=(None, data_dim)))
+    model.add(BatchNormalization(trainable=True))
     model.add(LSTM(32, return_sequences=True))
-    model.add(Dense(units=32))
     model.add(LSTM(32, return_sequences=True))
-    model.add(Dense(units=32,input_shape=(None, data_dim)))
     model.add(LSTM(32))
     model.add(Dense(num_classes, activation='softmax'))
+
 
     model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
     model.summary()
@@ -119,23 +127,30 @@ def dense_lstm ():
     save_model = ModelCheckpoint(model_name+'weights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
 
-    # # to continue from where the training stopped
-    # models = []
-    # for file in os.listdir(""):
-    #     if file.startswith(model_name):
-    #         models.append(file)
-    #
-    # models.sort()
-    # if models.__len__() > 2:
-    #     model.load_weights('Second_training/'+models[-1])
-    #     epochnum = int(models[-1][-7:][:4])
-    #
-    # else:
-    #     epochnum = 0
 
 
-    model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
-                        ,use_multiprocessing=True, workers=multiprocessing.cpu_count(),max_queue_size=20)
+    # to continue from where the training stopped
+    models = []
+    for file in os.listdir("Second_training"):
+        if file.startswith(model_name):
+            models.append(file)
+
+    models.sort()
+    if models.__len__() > 2:
+        model.load_weights('Second_training/'+models[-1])
+        epochnum = int(models[-1][-7:][:4])
+
+    else:
+        epochnum = 0
 
 
-dense_lstm()
+    model.fit_generator(generator=data_generator("dev"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
+                        ,use_multiprocessing=True, workers=2 , initial_epoch=epochnum)
+
+
+
+
+
+# patchnormmodel()
+
+
