@@ -67,7 +67,7 @@ tmux attach
 # Model Trained
 ### First Model
 * structure
-
+```
 Layer (type)                Output Shape              Param #   
 ==================================
 lstm_1 (LSTM)                (None, None, 32)          8320      ______________________________________________________________
@@ -81,7 +81,7 @@ dense_1 (Dense)              (None, 16)                528
 Total params: 28,720
 Trainable params: 28,720
 Non-trainable params: 0
-
+```
 
 
 ### 2nd Model 
