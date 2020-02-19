@@ -149,8 +149,6 @@ def patchnormmodel ():
 
 
 
-
-
 # patchnormmodel()
 
 
