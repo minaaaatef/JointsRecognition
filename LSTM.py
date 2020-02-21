@@ -101,8 +101,8 @@ def prepare_input_Matrix(mode="dev"):
             yield data[0], data[1]
 
 
-def patchnormmodel ():
-    model_name = 'patchnormmodel'
+def DropOutmodel ():
+    model_name = 'DropOutmodel'
 
 
 
@@ -112,7 +112,7 @@ def patchnormmodel ():
 
     # model
     model = Sequential()
-    model.add(Dropout(0.2, input_shape=(None,data_dim)))
+    model.add(Dropout(0.2, input_shape=(None,data_dim,)))
     model.add(Dense(units=32,input_shape=(None, data_dim)))
 
     model.add(LSTM(32, return_sequences=True))
@@ -150,6 +150,6 @@ def patchnormmodel ():
 
 
 
-# patchnormmodel()
+DropOutmodel()
 
 
