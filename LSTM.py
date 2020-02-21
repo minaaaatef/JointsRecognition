@@ -112,8 +112,9 @@ def patchnormmodel ():
 
     # model
     model = Sequential()
+    model.add(Dropout(0.2, input_shape=(34,)))
     model.add(Dense(units=32,input_shape=(None, data_dim)))
-    model.add(BatchNormalization(trainable=True))
+
     model.add(LSTM(32, return_sequences=True))
     model.add(LSTM(32, return_sequences=True))
     model.add(LSTM(32))
@@ -144,7 +145,7 @@ def patchnormmodel ():
         epochnum = 0
 
 
-    model.fit_generator(generator=data_generator("dev"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
+    model.fit_generator(generator=data_generator("dev"),steps_per_epoch=2129,epochs=100,callbacks=[save_model]
                         ,use_multiprocessing=True, workers=2 , initial_epoch=epochnum)
 
 
