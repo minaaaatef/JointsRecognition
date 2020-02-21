@@ -112,7 +112,7 @@ def patchnormmodel ():
 
     # model
     model = Sequential()
-    model.add(Dropout(0.2, input_shape=(34,)))
+    model.add(Dropout(0.2, input_shape=(None,data_dim)))
     model.add(Dense(units=32,input_shape=(None, data_dim)))
 
     model.add(LSTM(32, return_sequences=True))
