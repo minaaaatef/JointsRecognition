@@ -52,6 +52,7 @@ def biggerModel ():
     model.add(LSTM(64, return_sequences=True))
     model.add(LSTM(64, return_sequences=True))
     model.add(LSTM(64))
+    model.add(Dropout(0.2))
     model.add(Dense(num_classes, activation='softmax'))
 
 
