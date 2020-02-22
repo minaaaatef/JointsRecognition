@@ -45,6 +45,7 @@ def biggerModel ():
 
     # model
     model = Sequential()
+    model.add(Dropout(0.2, input_shape=(None,)))
     model.add(Dense(units=64,input_shape=(None, data_dim)))
     model.add(BatchNormalization(trainable=False))
     model.add(LSTM(64, return_sequences=True,input_shape=(None, data_dim)))
