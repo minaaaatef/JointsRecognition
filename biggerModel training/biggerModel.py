@@ -45,7 +45,7 @@ def biggerModel ():
 
     # model
     model = Sequential()
-    model.add(Dropout(0.2, input_shape=(None,)))
+   # model.add(Dropout(0.2, input_shape=(200,)))
     model.add(Dense(units=64,input_shape=(None, data_dim)))
     model.add(BatchNormalization(trainable=False))
     model.add(LSTM(64, return_sequences=True,input_shape=(None, data_dim)))
@@ -64,10 +64,11 @@ def biggerModel ():
                                          save_weights_only=False, period=10)
 
 
-    model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
-                        ,use_multiprocessing=True, workers=2,shuffle=True)
+   # model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
+                        #,use_multiprocessing=True, workers=2,shuffle=True)
 
-
+    model.evaluate_generator(generator=data_generator("dataset"), steps=2129, callbacks=[save_model]
+                        , max_queue_size=10, workers=2, use_multiprocessing=True, verbose=0)
 
 biggerModel()
 
