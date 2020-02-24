@@ -71,7 +71,7 @@ def ecaluate(model_name,mode = 'dev',path = ""):
         raise ValueError("results: status must be one of %r." % valid)
 
     model = Init_model()
-    model = load_last_model(path,model,model_name)
+    model,epoc = load_last_model(path,model,model_name)
     print(model.evaluate_generator(data_generator(mode)))
 
 
