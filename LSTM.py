@@ -62,7 +62,7 @@ def train (model_name,path = "",epochs=100):
     save_model = ModelCheckpoint(model_name+'weights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
     model,inital_epoch_num = load_last_model(path,model,model_name)
-    model.fit_generator(data_generator('dataset'), epochs, callbacks=[save_model],initial_epoch=inital_epoch)
+    model.fit_generator(data_generator('dataset'), epochs, callbacks=[save_model],initial_epoch=inital_epoch_num)
     
 
 def ecaluate(model_name,mode = 'dev',path = ""):
