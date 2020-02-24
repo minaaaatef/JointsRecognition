@@ -107,7 +107,6 @@ def base ():
 
     # model
     model = Sequential()
-    model.add(BatchNormalization())
     model.add(LSTM(32, return_sequences=True,input_shape=(None, data_dim)))
     model.add(LSTM(32, return_sequences=True))
     model.add(LSTM(32))

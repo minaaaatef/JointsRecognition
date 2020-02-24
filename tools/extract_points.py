@@ -24,6 +24,8 @@ for subdir, dirs, files in os.walk(path,topdown=True):
       except:
         couldRename += 1
 
+
+
 print("couldn't rename  " +str(couldRename) )
 
 print("made  " +str(count) )
