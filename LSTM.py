@@ -76,7 +76,7 @@ def ecaluate(model_name,mode = 'dev',path = ""):
 
 
 
-def draw_plots(path):
+def draw_plots(path,model_name):
     model = Init_model()
     
     models = []
