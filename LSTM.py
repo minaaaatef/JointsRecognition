@@ -48,7 +48,7 @@ def Init_model ():
 def load_last_model(path,model,model_name):
     models = []
     for file in os.listdir(path):
-        if file.startswith(model_name):
+        if file.startswith(model_name) and file.endswith('h5'):
             models.append(file)
     models.sort()
     inital_epoch = 0
