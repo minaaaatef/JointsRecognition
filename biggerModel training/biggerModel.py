@@ -1,3 +1,9 @@
+
+
+
+
+
+
 from keras.models import Sequential,model_from_json
 from keras.layers import LSTM, Dense, BatchNormalization,Dropout
 from keras.utils import to_categorical
@@ -45,10 +51,10 @@ def biggerModel ():
 
     # model
     model = Sequential()
-   # model.add(Dropout(0.2, input_shape=(200,)))
-    model.add(Dense(units=64,input_shape=(None, data_dim)))
+    model.add(Dropout(0.2, input_shape=(None,data_dim)))
+    model.add(Dense(units=64))
     model.add(BatchNormalization(trainable=False))
-    model.add(LSTM(64, return_sequences=True,input_shape=(None, data_dim)))
+    model.add(LSTM(64, return_sequences=True))
     model.add(LSTM(64, return_sequences=True))
     model.add(LSTM(64, return_sequences=True))
     model.add(LSTM(64))
@@ -60,16 +66,16 @@ def biggerModel ():
     model.summary()
 
     # callback to save model every 10 epochs
-    save_model = ModelCheckpoint('weights{epoch:08d}.h5',
+    save_model = ModelCheckpoint('Sec_weights/weights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
 
 
-   # model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=500,callbacks=[save_model]
-                        #,use_multiprocessing=True, workers=2,shuffle=True)
-
-    model.evaluate_generator(generator=data_generator("dataset"), steps=2129, callbacks=[save_model]
-                        , max_queue_size=10, workers=2, use_multiprocessing=True, verbose=0)
-
+    model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=130,callbacks=[save_model]
+                        ,use_multiprocessing=True, workers=2,shuffle=True)
+#    model.load_weights("weights00000130.h5")
+#    test=model.evaluate_generator(generator=data_generator("dataset"), steps=2129, callbacks=[save_model]
+#                        , max_queue_size=10, workers=2, use_multiprocessing=True, verbose=0)
+   # print(test)
 biggerModel()
 
 
