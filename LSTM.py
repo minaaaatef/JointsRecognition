@@ -36,11 +36,11 @@ def Init_model ():
     num_classes = 16
     
     model = Sequential()
-    model.add(LSTM(32, return_sequences=True,input_shape=(None, data_dim)))
-    model.add(LSTM(32, return_sequences=True))
-    model.add(LSTM(32))
+    model = Sequential()
+    model.add(Dense(100, activation='relu', input_shape=(None, data_dim)))
+    model.add(Dense(100, activation='relu', input_shape=(None, data_dim)))
+    model.add(Dense(100, activation='relu', input_shape=(None, data_dim)))
     model.add(Dense(num_classes, activation='softmax'))
-    model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
     model.summary()
     return model
 
