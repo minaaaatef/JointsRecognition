@@ -53,19 +53,19 @@ def load_last_model(path,model,model_name):
     models.sort()
     inital_epoch = 0
     if models.__len__() > 2:
-        model.load_weights(path + model[-1])
-        inital_epoch = int(models[-1][:-6][:3])
+        model.load_weights(path + models[-1])
+        inital_epoch = int(models[-1][-6:][:3])
     return model,inital_epoch
 
-def train (model_name,path = "",epochs=100):
+def train (model_name,path = "./",epochs=100):
     model = Init_model()
     save_model = ModelCheckpoint(model_name+'weights{epoch:08d}.h5',
-                                         save_weights_only=False, period=10)
+                                         save_weights_only=False, period=1)
     model,inital_epoch_num = load_last_model(path,model,model_name)
-    model.fit_generator(data_generator('dataset'), epochs, callbacks=[save_model],initial_epoch=inital_epoch_num)
+    model.fit_generator(data_generator('dataset'), epochs=epochs,callbacks=[save_model],initial_epoch=inital_epoch_num)
     
 
-def ecaluate(model_name,mode = 'dev',path = ""):
+def evaluate (model_name,mode = 'dev',path = "./"):
     valid = ['dev','dataset']
     if mode not in valid:
         raise ValueError("results: status must be one of %r." % valid)
@@ -76,12 +76,12 @@ def ecaluate(model_name,mode = 'dev',path = ""):
 
 
 
-def draw_plots(path,model_name):
+def draw_plots(model_name,path ='./'):
     model = Init_model()
     
     models = []
     for file in os.listdir(path):
-        if file.startswith(model_name):
+        if file.startswith(model_name) and file.endswith('h5'):
             models.append(file)
     models.sort()
 
@@ -110,5 +110,4 @@ def draw_plots(path,model_name):
     plt.savefig('dev.png')
 
 
-
-
+draw_plots('')
