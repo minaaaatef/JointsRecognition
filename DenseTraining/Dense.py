@@ -10,11 +10,11 @@ import multiprocessing
 import matplotlib.pyplot as plt
 import pickle
 
-import numpy as np
 from numpy.testing import assert_allclose
 
 from keras.layers import Input
 from keras import regularizers
+
 from keras.utils.test_utils import layer_test
 from keras.layers import normalization
 from keras.models import Sequential, Model
@@ -46,9 +46,9 @@ def DenseModel ():
     # model
     model = Sequential()
     model.add(Dense(100, activation='relu', input_shape=(None, data_dim)))
-    model.add(Dense(100, activation='relu', input_shape=(None, data_dim)))
-    model.add(Dense(100, activation='relu', input_shape=(None, data_dim)))
-    model.add(Dense(num_classes, activation='softmax'))
+    model.add(Dense(100, activation='relu', input_shape=(None, 100)))
+    model.add(Dense(100, activation='relu', input_shape=(None, 100)))
+    model.add(Dense(num_classes, activation='softmax', input_shape=(None, 100)))
 
 
     model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
