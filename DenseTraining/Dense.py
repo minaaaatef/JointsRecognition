@@ -46,10 +46,9 @@ def DenseModel ():
 
     # model
     model = Sequential()
-    model.add(Dense(100, activation='relu', input_shape=(None,data_dim)))
+    model.add(Dense(100, activation='relu', input_shape=data_dim))
     model.add(Dense(100, activation='relu'))
     model.add(Dense(100, activation='relu'))
-    model.add(Flatten(input_shape=(None,100)))
     model.add(Dense(num_classes, activation='softmax'))
 
 
