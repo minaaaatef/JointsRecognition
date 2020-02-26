@@ -49,6 +49,7 @@ def DenseModel ():
     model.add(Dense(100, activation='relu', input_shape=(None,data_dim)))
     model.add(Dense(100, activation='relu'))
     model.add(Dense(100, activation='relu'))
+    model.add(Flatten())
     model.add(Dense(num_classes, activation='softmax'))
 
 
