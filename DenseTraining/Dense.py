@@ -39,6 +39,7 @@ class data_generator(Sequence):
 
 
 def DenseModel ():
+    model_name='DENSE-Model'
     data_dim = 34
     num_classes = 16
 
@@ -48,6 +49,7 @@ def DenseModel ():
     model.add(Dense(100, activation='relu', input_shape=(None, data_dim)))
     model.add(Dense(100, activation='relu', input_shape=(None, 100)))
     model.add(Dense(100, activation='relu', input_shape=(None, 100)))
+    model.add(Flatten())
     model.add(Dense(num_classes, activation='softmax', input_shape=(None, 100)))
 
 
@@ -55,7 +57,7 @@ def DenseModel ():
     model.summary()
 
     # callback to save model every 10 epochs
-    save_model = ModelCheckpoint('weights{epoch:08d}.h5',
+    save_model = ModelCheckpoint(model_name+'weights{epoch:08d}.h5',
                                          save_weights_only=False, period=10)
 
 
