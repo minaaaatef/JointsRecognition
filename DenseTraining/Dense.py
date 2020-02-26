@@ -1,5 +1,5 @@
 from keras.models import Sequential,model_from_json
-from keras.layers import LSTM, Dense, BatchNormalization,Dropout
+from keras.layers import LSTM, Dense, BatchNormalization,Dropout,Flatten
 from keras.utils import to_categorical
 from keras.callbacks import ModelCheckpoint
 import numpy as np
