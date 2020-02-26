@@ -104,20 +104,18 @@ def prepare_input_Matrix(mode="dev"):
 def DropOutmodel ():
     model_name = 'DropOutmodel'
 
-
-
     data_dim = 34
     num_classes = 16
 
 
     # model
     model = Sequential()
-    model.add(Dropout(0.2, input_shape=(None,data_dim,)))
     model.add(Dense(units=32,input_shape=(None, data_dim)))
-
+    model.add(Dropout(0.2,))
     model.add(LSTM(32, return_sequences=True))
     model.add(LSTM(32, return_sequences=True))
     model.add(LSTM(32))
+    model.add(Dropout(0.2,))
     model.add(Dense(num_classes, activation='softmax'))
 
 
@@ -145,11 +143,11 @@ def DropOutmodel ():
         epochnum = 0
 
 
-    model.fit_generator(generator=data_generator("dev"),steps_per_epoch=2129,epochs=100,callbacks=[save_model]
+    model.fit_generator(generator=data_generator("train"),steps_per_epoch=2129,epochs=250,callbacks=[save_model]
                         ,use_multiprocessing=True, workers=2 , initial_epoch=epochnum)
 
-
+    #model.load_weights("DropOutmodelweights00000100.h5")
+    #test =  model.evaluate_generator(generator=data_generator("train"), max_queue_size = 10)
+    #print(test)
 
 DropOutmodel()
-
-
