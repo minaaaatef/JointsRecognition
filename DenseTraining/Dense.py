@@ -46,11 +46,9 @@ def DenseModel ():
 
     # model
     model = Sequential()
-    model.add(Dense(100, activation='relu', input_shape=data_dim))
-    model.add(Dense(100, activation='relu'))
-    model.add(Dense(100, activation='relu'))
-    model.add(Dense(num_classes, activation='softmax'))
-
+    model.add(Dense(12, activation='relu', input_shape=(data_dim,)))
+    model.add(Dense(8, activation='relu')) 
+    model.add(Dense(1, activation='sigmoid'))
 
     model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
     model.summary()
