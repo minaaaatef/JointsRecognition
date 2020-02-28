@@ -52,7 +52,7 @@ def biggerModel ():
     model.add(LSTM(64, return_sequences=True))
     model.add(LSTM(64, return_sequences=True))
     model.add(LSTM(64))
-#    model.add(Dropout(0.2))
+    model.add(Dropout(0.2))
     model.add(Dense(num_classes, activation='softmax'))
 
 
@@ -60,16 +60,16 @@ def biggerModel ():
     model.summary()
 
     # callback to save model every 10 epochs
-    #save_model = ModelCheckpoint('Sec_weights/weights{epoch:08d}.h5',
-    #                                     save_weights_only=False, period=10)
+    save_model = ModelCheckpoint('tr_with1stdropout/weights{epoch:08d}.h5',
+                                         save_weights_only=False, period=10)
 
-
-  #  model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=130,callbacks=[save_model]
-  #                      ,use_multiprocessing=True, workers=2,shuffle=True)
     model.load_weights("weights00000020.h5")
-    test=model.evaluate_generator(generator=data_generator("dataset"), steps=1000
-                        , max_queue_size=10, workers=2, use_multiprocessing=True, verbose=0)
-    print(test)
+    model.fit_generator(generator=data_generator("dataset"),steps_per_epoch=2129,epochs=100,callbacks=[save_model]
+                        ,use_multiprocessing=True, workers=2,shuffle=True)
+  #  model.load_weights("weights00000020.h5")
+  #  test=model.evaluate_generator(generator=data_generator("dataset"),steps=1000
+  #                      , max_queue_size=10, workers=2, use_multiprocessing=True, verbose=0)
+  #  print(test)
 biggerModel()
 
 
