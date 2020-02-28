@@ -1,0 +1,9 @@
+model = Sequential()
+    model.add(Dense(units=32,input_shape=(None, data_dim)))
+    model.add(Dropout(0.2,))
+    model.add(LSTM(32, return_sequences=True))
+    model.add(LSTM(32, return_sequences=True))
+    model.add(LSTM(32))
+    model.add(Dropout(0.2,))
+    model.add(Dense(num_classes, activation='softmax'))
+
