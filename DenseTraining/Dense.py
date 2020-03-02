@@ -46,11 +46,18 @@ def DenseModel ():
 
     # model
     model = Sequential()
-    model.add(Dense(100, activation='relu', input_shape=( None,data_dim)))
-    model.add(Dense(64, activation='relu'))
+    model.add(LSTM(50, return_sequences=True, input_shape=(None, data_dim)))
+    model.add(LSTM(50, return_sequences=True))
+    model.add(LSTM(50, return_sequences=True))
+    model.add(LSTM(50, return_sequences=True))
+    model.add(LSTM(50))
     model.add(Dense(32, activation='relu'))
-    model.add(BatchNormalization())
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(32, activation='relu'))
     model.add(Dense(num_classes, activation='softmax'))
+
+
     
     model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
     model.summary()
