@@ -66,7 +66,80 @@ def biggerModel ():
                         ,use_multiprocessing=True, workers=2,shuffle=True)
 
 
+def Init_model ():
+    data_dim = 34
+    num_classes = 16
+    
+    # model
+    model = Sequential()
+    model.add(Dense(units=64,input_shape=(None, data_dim)))
+    model.add(BatchNormalization(trainable=False))
+    model.add(LSTM(64, return_sequences=True,input_shape=(None, data_dim)))
+    model.add(LSTM(64, return_sequences=True))
+    model.add(LSTM(64, return_sequences=True))
+    model.add(LSTM(64))
+    model.add(Dense(num_classes, activation='softmax'))
+    model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+    model.summary()
+    return model
 
-biggerModel()
 
 
+def load_last_model(path,model,model_name):
+    models = []
+    for file in os.listdir(path):
+        if file.startswith(model_name) and file.endswith('h5'):
+            models.append(file)
+    models.sort()
+    inital_epoch = 0
+    if models.__len__() > 2:
+        model.load_weights(path + models[-1])
+        inital_epoch = int(models[-1][-6:][:3])
+    return model,inital_epoch
+
+def evaluate (model_name,mode = 'dev',path = "./"):
+    valid = ['dev','dataset']
+    if mode not in valid:
+        raise ValueError("results: status must be one of %r." % valid)
+
+    model = Init_model()
+    model,epoc = load_last_model(path,model,model_name)
+    print(model.evaluate_generator(data_generator(mode)))
+
+
+
+def draw_plots(model_name,path ='./'):
+    model = Init_model()
+    
+    models = []
+    for file in os.listdir(path):
+        if file.startswith(model_name) and file.endswith('h5'):
+            models.append(file)
+    models.sort()
+
+    accuracylist = []
+    for x in models:
+        model.load_weights(path+x)
+        loss,accuracy = model.evaluate_generator(data_generator('dataset'))
+        accuracylist.append(accuracy)
+
+    plt.plot(accuracylist)
+    plt.title('Test Accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('Epochs#')
+    plt.savefig('dataset.png')
+
+    accuracylist = []
+    for x in models:
+        model.load_weights(path+x)
+        loss,accuracy = model.evaluate_generator(data_generator('dev'))
+        accuracylist.append(accuracy)
+
+    plt.plot(accuracylist)
+    plt.title('Test Accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('Epochs#')
+    plt.savefig('dev.png')
+
+
+draw_plots('weights')
